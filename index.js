@@ -24,23 +24,6 @@ try {
         console.log(file)
     }
 
-    // const fileName = './test/sample.txt';
-    // // eslint-disable-next-line no-undef
-    // const blob = new Blob([await readFile(fileName)]);
-    // // eslint-disable-next-line no-undef
-    // const form = new FormData();
-    // Object.entries(json.fields).forEach(([field, value]) => {
-    //     form.set(field, value);
-    // });
-    // form.set('key', `${json.fields.key}/sample.txt`);
-    // form.set('file', blob, 'sample.txt');
-    //
-    // const resp = await fetch(json.url, {
-    //     method: 'POST',
-    //     body: form,
-    // });
-
-
 } catch (error) {
     core.setFailed(error.message);
 }
