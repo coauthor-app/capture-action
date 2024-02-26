@@ -33339,7 +33339,7 @@ async function run() {
 
     const globber = await glob.create(path, { followSymbolicLinks: true });
     console.log(`test ${path}`);
-    console.log(`${JSON.stringify(globber)}`);
+
     for await (const file of globber.globGenerator()) {
         console.log(file)
     }
