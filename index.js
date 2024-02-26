@@ -2,6 +2,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const glob = require('@actions/glob')
 const {readFile} = require("node:fs/promises");
+const pathUtil = require('path');
 
 
 async function run() {
@@ -26,14 +27,30 @@ async function run() {
     const globber = await glob.create(path, { followSymbolicLinks: true, matchDirectories: false });
     console.log(`test ${path}`);
 
-    console.log(process.cwd());
+    const cwd = `${process.cwd()}${pathUtil.sep}`;
 
     for await (const file of globber.globGenerator()) {
-        const relativePath = file.replace(process.cwd(), '');0
-        console.log(`${file} - ${relativePath}`);
+        const filePath = file.replace(cwd, '');
+        const fileName = pathUtil.basename(filePath);
+        console.log(`${file} - ${filePath} - ${fileName}`);
+
+        // eslint-disable-next-line no-undef
+        const blob = new Blob([await readFile(filePath)]);
+        // eslint-disable-next-line no-undef
+        const form = new FormData();
+        Object.entries(json.fields).forEach(([field, value]) => {
+            form.set(field, value);
+        });
+        form.set('key', `${json.fields.key}/${filePath}`);
+        form.set('file', blob, fileName);
+
+        const resp = await fetch(json.url, {
+            method: 'POST',
+            body: form,
+        });
     }
 }
 
 run().catch(error => {
-  core.setFailed(error.message);
+    core.setFailed(error.message);
 })
