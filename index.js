@@ -26,6 +26,8 @@ async function run() {
     const globber = await glob.create(path, { followSymbolicLinks: true, matchDirectories: false });
     console.log(`test ${path}`);
 
+    console.log(process.cwd());
+
     for await (const file of globber.globGenerator()) {
         console.log(file)
     }
