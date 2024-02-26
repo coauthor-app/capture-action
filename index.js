@@ -23,7 +23,7 @@ async function run() {
     const json = await response.json();
 
 
-    const globber = await glob.create(path, { followSymbolicLinks: true });
+    const globber = await glob.create(path, { followSymbolicLinks: true, matchDirectories: false });
     console.log(`test ${path}`);
 
     for await (const file of globber.globGenerator()) {
