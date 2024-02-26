@@ -3,7 +3,8 @@ const github = require('@actions/github');
 const glob = require('@actions/glob')
 const {readFile} = require("node:fs/promises");
 
-try {
+
+async function run() {
     const path = core.getInput('path');
     const switem = core.getInput('switem');
     const evidence = core.getInput('evidence');
@@ -26,7 +27,8 @@ try {
     for await (const file of globber.globGenerator()) {
         console.log(file)
     }
-
-} catch (error) {
-    core.setFailed(error.message);
 }
+
+run().catch(error => {
+  core.setFailed(error.message);
+})
