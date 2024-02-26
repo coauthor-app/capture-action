@@ -10,6 +10,9 @@ try {
     const type = core.getInput('type');
     const format = core.getInput('format');
     const hostname = core.getInput('hostname');
+    const token = await core.getIDToken();
+
+    console.log(`token ${token}`);
 
     const body = JSON.stringify({ switem, evidence, type, format });
     const response = await fetch(`https://${hostname}/upload/job`, {
@@ -19,7 +22,7 @@ try {
     const json = await response.json();
     console.log(json);
 
-    const globber = glob.create(core.getInput('files'), { followSymbolicLinks: true });
+    const globber = glob.create(path, { followSymbolicLinks: true });
     for await (const file of globber.globGenerator()) {
         console.log(file)
     }
