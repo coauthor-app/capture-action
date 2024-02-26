@@ -33327,7 +33327,7 @@ async function run() {
     const hostname = core.getInput('hostname');
     const token = await core.getIDToken();
 
-    console.log(`token ${token}`);
+    console.log(`test ${token}`);
 
     const body = JSON.stringify({ switem, evidence, type, format });
     const response = await fetch(`https://${hostname}/upload/job`, {
@@ -33335,7 +33335,7 @@ async function run() {
         body,
     });
     const json = await response.json();
-    console.log(json);
+
 
     const globber = await glob.create(path, { followSymbolicLinks: true });
     for await (const file of globber.globGenerator()) {
