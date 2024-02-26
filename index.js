@@ -29,6 +29,9 @@ async function run() {
 
     const cwd = `${process.cwd()}${pathUtil.sep}`;
 
+    const successfulUploads = [];
+    const failedUploads = [];
+
     for await (const file of globber.globGenerator()) {
         const filePath = file.replace(cwd, '');
         const fileName = pathUtil.basename(filePath);
@@ -48,6 +51,17 @@ async function run() {
             method: 'POST',
             body: form,
         });
+
+        if (resp.ok) {
+            successfulUploads.push(filePath);
+        } else {
+            failedUploads.push(filePath);
+        }
+    }
+
+    console.log(`Uploads: ${successfulUploads.length} successful, ${failedUploads.length} failed`);
+    if (failedUploads.length > 0) {
+        core.setFailed(`Failed to upload: ${failedUploads.join(', ')}`);
     }
 }
 
