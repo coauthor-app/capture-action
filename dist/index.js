@@ -33343,7 +33343,8 @@ async function run() {
     console.log(process.cwd());
 
     for await (const file of globber.globGenerator()) {
-        console.log(file)
+        const relativePath = file.replace(process.cwd(), '');0
+        console.log(`${file} - ${relativePath}`);
     }
 }
 
