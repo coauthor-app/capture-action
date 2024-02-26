@@ -1,5 +1,5 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Evidence capture for Coauthor'
+description: 'Uploads test results, reports, logs, and other evidence to Coauthor'
 inputs:
   path:
     description: 'A file, directory or wildcard pattern that describes what to upload'
