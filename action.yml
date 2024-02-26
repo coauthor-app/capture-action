@@ -1,13 +1,24 @@
 name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  path:
+    description: 'A file, directory or wildcard pattern that describes what to upload'
     required: true
-    default: 'World'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  switem:
+    description: 'The Software Item the evidence is associated with'
+    required: false
+  evidence:
+    description: 'The evidence category'
+    required: true
+  type:
+    description: 'The type of evidence'
+    required: true
+  format:
+    description: 'The format of the evidence'
+    required: true
+  hostname:
+    description: 'The hostname of the server'
+    required: true
 runs:
   using: 'node20'
   main: 'dist/index.js'

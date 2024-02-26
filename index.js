@@ -1,15 +1,46 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const glob = require('@actions/glob')
+const {readFile} = require("node:fs/promises");
 
 try {
-    // `who-to-greet` input defined in action metadata file
-    const nameToGreet = core.getInput('who-to-greet');
-    console.log(`Hello ${nameToGreet}!`);
-    const time = (new Date()).toTimeString();
-    core.setOutput("time", time);
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`);
+    const path = core.getInput('path');
+    const switem = core.getInput('switem');
+    const evidence = core.getInput('evidence');
+    const type = core.getInput('type');
+    const format = core.getInput('format');
+    const hostname = core.getInput('hostname');
+
+    const body = JSON.stringify({ switem, evidence, type, format });
+    const response = await fetch(`https://${hostname}/upload/job`, {
+        method: 'POST',
+        body,
+    });
+    const json = await response.json();
+    console.log(json);
+
+    const globber = glob.create(core.getInput('files'), { followSymbolicLinks: true });
+    for await (const file of globber.globGenerator()) {
+        console.log(file)
+    }
+
+    // const fileName = './test/sample.txt';
+    // // eslint-disable-next-line no-undef
+    // const blob = new Blob([await readFile(fileName)]);
+    // // eslint-disable-next-line no-undef
+    // const form = new FormData();
+    // Object.entries(json.fields).forEach(([field, value]) => {
+    //     form.set(field, value);
+    // });
+    // form.set('key', `${json.fields.key}/sample.txt`);
+    // form.set('file', blob, 'sample.txt');
+    //
+    // const resp = await fetch(json.url, {
+    //     method: 'POST',
+    //     body: form,
+    // });
+
+
 } catch (error) {
     core.setFailed(error.message);
 }
