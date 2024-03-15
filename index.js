@@ -35,7 +35,7 @@ async function run() {
         core.setFailed(`Failed to prepare upload: ${response.status} - ${text}`);
         return;
     }
-    console.log(`test ${response.status}`);
+    console.log(`status ${response.status}`);
     const json = await response.json();
 
 
