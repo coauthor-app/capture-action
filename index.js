@@ -19,6 +19,9 @@ async function run() {
     const body = JSON.stringify({ switem, evidence, type, format });
     const response = await fetch(`https://${hostname}/upload/job`, {
         method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
         body,
     });
     const json = await response.json();
