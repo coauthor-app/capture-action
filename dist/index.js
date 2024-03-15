@@ -33328,13 +33328,27 @@ async function run() {
     const hostname = core.getInput('hostname');
     const token = await core.getIDToken();
 
-    console.log(`test ${token}`);
+    if (!token) {
+        core.setFailed('No OIDC token found.');
+        return;
+    }
 
     const body = JSON.stringify({ switem, evidence, type, format });
     const response = await fetch(`https://${hostname}/upload/job`, {
         method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
         body,
     });
+
+    if (!response.ok) {
+        const text = await response.text();
+        core.setFailed(`Failed to prepare upload: ${response.status} - ${text}`);
+        return;
+    }
+    console.log(`status ${response.status}`);
+    console.log(JSON.stringify(response));
     const json = await response.json();
 
 
