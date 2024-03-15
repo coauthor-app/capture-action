@@ -19,8 +19,6 @@ async function run() {
         return;
     }
 
-    console.log(`test ${token}`);
-
     const body = JSON.stringify({ switem, evidence, type, format });
     const response = await fetch(`https://${hostname}/upload/job`, {
         method: 'POST',
@@ -36,6 +34,7 @@ async function run() {
         return;
     }
     console.log(`status ${response.status}`);
+    console.log(JSON.stringify(response));
     const json = await response.json();
 
 
