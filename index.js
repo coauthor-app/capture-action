@@ -14,6 +14,11 @@ async function run() {
     const hostname = core.getInput('hostname');
     const token = await core.getIDToken();
 
+    if (!token) {
+        core.setFailed('No OIDC token found.');
+        return;
+    }
+
     console.log(`test ${token}`);
 
     const body = JSON.stringify({ switem, evidence, type, format });
@@ -24,6 +29,13 @@ async function run() {
         },
         body,
     });
+
+    if (!response.ok) {
+        const text = await response.text();
+        core.setFailed(`Failed to prepare upload: ${response.status} - ${text}`);
+        return;
+    }
+    console.log(`test ${response.status}`);
     const json = await response.json();
 
 
