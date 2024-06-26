@@ -1,0 +1,29 @@
+name: Evidence capture for Coauthor
+description: >-
+  Uploads to Coauthor test results, reports, logs, and other evidence required
+  by IEC 62304 for Software as a Medical Device development. Coauthor adds the
+  evidence to your projects Technical File (DHF) and generates traceability
+  matrices and additional reports
+inputs:
+  path:
+    description: A file, directory or wildcard pattern that describes what to upload
+    required: true
+  switem:
+    description: The Software Item the evidence is associated with
+    required: false
+  evidence:
+    description: The evidence category
+    required: true
+  type:
+    description: The type of evidence
+    required: true
+  format:
+    description: The format of the evidence
+    required: true
+  hostname:
+    description: The hostname of the server
+    default: archive.coauthor.app
+    required: false
+runs:
+  using: node20
+  main: dist/index.js
