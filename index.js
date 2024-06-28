@@ -51,29 +51,42 @@ async function run() {
   const successfulUploads = [];
   const failedUploads = [];
 
-  for await (const file of globber.globGenerator()) {
-    const filePath = file.replace(cwd, '');
-    const fileName = pathUtil.basename(filePath);
-    console.log(`Uploading ${filePath}`);
+  const singleFileUpload = 'filename' in json.fields;
+  if (singleFileUpload && globber.globGenerator().length > 1) {
+    failedUploads.push('Multiple files found but only one file is allowed');
+  } else {
+    for await (const file of globber.globGenerator()) {
+      const filePath = file.replace(cwd, '');
+      const fileName = pathUtil.basename(filePath);
+      console.log(`Uploading ${filePath}`);
 
-    const blob = new Blob([await readFile(filePath)]);
+      const blob = new Blob([await readFile(filePath)]);
 
-    const form = new FormData();
-    Object.entries(json.fields).forEach(([field, value]) => {
-      form.set(field, value);
-    });
-    form.set('key', `${json.fields.key}/${filePath}`);
-    form.set('file', blob, fileName);
+      const form = new FormData();
+      Object.entries(json.fields).forEach(([field, value]) => {
+        form.set(field, value);
+      });
 
-    const resp = await fetch(json.url, {
-      method: 'POST',
-      body: form
-    });
+      if (singleFileUpload) {
+        // use the filename from the server and remove filename from the fields
+        form.set('key', `${json.fields.key}/${json.fields.filename}`);
+        form.set('file', blob, json.fields.filename);
+        form.delete('filename');
+      } else {
+        form.set('key', `${json.fields.key}/${filePath}`);
+        form.set('file', blob, fileName);
+      }
 
-    if (resp.ok) {
-      successfulUploads.push(filePath);
-    } else {
-      failedUploads.push(filePath);
+      const resp = await fetch(json.url, {
+        method: 'POST',
+        body: form
+      });
+
+      if (resp.ok) {
+        successfulUploads.push(filePath);
+      } else {
+        failedUploads.push(filePath);
+      }
     }
   }
 
