@@ -1,7 +1,8 @@
 name: Evidence capture for Coauthor
 author: Coauthor by Hindsight Software
 description: >-
-  Uploads test results, reports, and other evidence to Coauthor for ISO/IEC 62304 and Software as a Medical Device compliance
+  Uploads test results, reports, and other evidence to Coauthor for ISO/IEC
+  62304 and Software as a Medical Device compliance
 branding:
   icon: upload-cloud
   color: purple
